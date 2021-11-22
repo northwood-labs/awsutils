@@ -59,9 +59,7 @@ func GetAWSConfig(ctx context.Context, region, profile string, retries int, verb
 		}),
 		func(profile string) config.LoadOptionsFunc {
 			if profile == "" {
-				var emptyOptionsFunc config.LoadOptionsFunc
-
-				return emptyOptionsFunc
+				return config.WithSharedConfigProfile("")
 			}
 
 			return config.WithSharedConfigProfile(profile)
