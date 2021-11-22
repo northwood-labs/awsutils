@@ -17,4 +17,5 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.5.1 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.6.1 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.10.1 // indirect
+	github.com/northwood-labs/golang-utils/exiterrorf v0.0.0-20211120002424-5d7d1452056f // indirect
 )

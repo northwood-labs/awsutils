@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/smithy-go/logging"
+	"github.com/northwood-labs/golang-utils/exiterrorf"
 )
 
 // NoOpRateLimit to prevent limiting of queries to AWS.
@@ -29,8 +30,21 @@ func noOpToken() error {
 }
 
 // GetAWSConfig returns a standard AWS config object pre-configured for use with regions, retries, and verbosity.
+//
+// If region is empty, we will attempt to read AWS_REGION then AWS_DEFAULT_REGION.
 func GetAWSConfig(ctx context.Context, region string, retries int, verbose bool) (aws.Config, error) {
 	emptyConfig := aws.Config{}
+	var ok bool
+
+	if region == "" {
+		region, ok = os.LookupEnv("AWS_REGION")
+		if !ok {
+			region, ok = os.LookupEnv("AWS_DEFAULT_REGION")
+			if !ok {
+				exiterrorf.ExitErrorf("Please specify an AWS region.")
+			}
+		}
+	}
 
 	// Pull AWS credentials from the environment.
 	conf, err := config.LoadDefaultConfig(
