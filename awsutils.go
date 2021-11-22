@@ -32,7 +32,7 @@ func noOpToken() error {
 // GetAWSConfig returns a standard AWS config object pre-configured for use with regions, retries, and verbosity.
 //
 // If region is empty, we will attempt to read AWS_REGION then AWS_DEFAULT_REGION.
-func GetAWSConfig(ctx context.Context, region string, retries int, verbose bool) (aws.Config, error) {
+func GetAWSConfig(ctx context.Context, region, profile string, retries int, verbose bool) (aws.Config, error) {
 	emptyConfig := aws.Config{}
 	var ok bool
 
@@ -57,6 +57,15 @@ func GetAWSConfig(ctx context.Context, region string, retries int, verbose bool)
 
 			return retryLogic
 		}),
+		func(profile string) config.LoadOptionsFunc {
+			if profile == "" {
+				var emptyOptionsFunc config.LoadOptionsFunc
+
+				return emptyOptionsFunc
+			}
+
+			return config.WithSharedConfigProfile(profile)
+		}(profile),
 	)
 	if err != nil {
 		return emptyConfig, fmt.Errorf("AWS configuration error: %w", err)
