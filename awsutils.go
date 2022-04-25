@@ -2,6 +2,7 @@ package awsutils
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 
@@ -11,6 +12,8 @@ import (
 	"github.com/aws/smithy-go/logging"
 	"github.com/northwood-labs/golang-utils/exiterrorf"
 )
+
+var errUnknownRegion = errors.New("please specify an AWS region")
 
 // NoOpRateLimit to prevent limiting of queries to AWS.
 type NoOpRateLimit struct{}
@@ -41,7 +44,7 @@ func GetAWSConfig(ctx context.Context, region, profile string, retries int, verb
 		if !ok {
 			region, ok = os.LookupEnv("AWS_DEFAULT_REGION")
 			if !ok {
-				exiterrorf.ExitErrorf("Please specify an AWS region.")
+				exiterrorf.ExitErrorf(errUnknownRegion)
 			}
 		}
 	}
