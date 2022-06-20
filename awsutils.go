@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/smithy-go/logging"
+
 	"github.com/northwood-labs/golang-utils/exiterrorf"
 )
 
@@ -55,6 +56,7 @@ func GetAWSConfig(ctx context.Context, region, profile string, retries int, verb
 		config.WithDefaultRegion(region),
 		config.WithRegion(region),
 		config.WithRetryer(func() aws.Retryer {
+			// https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/retries-timeouts/
 			retryLogic := retry.NewStandard()
 			retry.AddWithMaxAttempts(retryLogic, retries)
 
@@ -68,10 +70,12 @@ func GetAWSConfig(ctx context.Context, region, profile string, retries int, verb
 			return config.WithSharedConfigProfile(profile)
 		}(profile),
 		func(verbose bool) config.LoadOptionsFunc {
-			if verbose {
+			// https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/logging/
+			if !verbose {
 				return config.WithClientLogMode(0)
 			}
 
+			// https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/aws#ClientLogMode
 			return config.WithClientLogMode(aws.LogRetries | aws.LogRequestWithBody | aws.LogResponseWithBody | aws.LogDeprecatedUsage | aws.LogRequestEventMessage | aws.LogResponseEventMessage) // lint:ignore_length
 		}(verbose),
 	)
