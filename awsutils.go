@@ -67,6 +67,13 @@ func GetAWSConfig(ctx context.Context, region, profile string, retries int, verb
 
 			return config.WithSharedConfigProfile(profile)
 		}(profile),
+		func(verbose bool) config.LoadOptionsFunc {
+			if verbose {
+				return config.WithClientLogMode(0)
+			}
+
+			return config.WithClientLogMode(aws.LogRetries | aws.LogRequestWithBody | aws.LogResponseWithBody | aws.LogDeprecatedUsage | aws.LogRequestEventMessage | aws.LogResponseEventMessage) // lint:ignore_length
+		}(verbose),
 	)
 	if err != nil {
 		return emptyConfig, fmt.Errorf("AWS configuration error: %w", err)
