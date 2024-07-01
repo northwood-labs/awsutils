@@ -3,9 +3,9 @@ module github.com/northwood-labs/awsutils
 go 1.17
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.11.1
+	github.com/aws/aws-sdk-go-v2 v1.30.1
 	github.com/aws/aws-sdk-go-v2/config v1.10.2
-	github.com/aws/smithy-go v1.9.0
+	github.com/aws/smithy-go v1.20.3
 	github.com/northwood-labs/golang-utils/exiterrorf v0.0.0-20211120002424-5d7d1452056f
 	github.com/stretchr/testify v1.7.0
 )
