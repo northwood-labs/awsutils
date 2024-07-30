@@ -10,14 +10,21 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws/retry"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/smithy-go/logging"
-
-	"github.com/northwood-labs/golang-utils/exiterrorf"
 )
 
 var errUnknownRegion = errors.New("please specify an AWS region")
 
 // NoOpRateLimit to prevent limiting of queries to AWS.
-type NoOpRateLimit struct{}
+type (
+	NoOpRateLimit struct{}
+
+	AWSConfigOptions struct {
+		Region  string
+		Profile string
+		Retries int
+		Verbose bool
+	}
+)
 
 // AddTokens to return nil for NoOpRateLimit.
 func (NoOpRateLimit) AddTokens(uint) error {
@@ -33,20 +40,44 @@ func noOpToken() error {
 	return nil
 }
 
-// GetAWSConfig returns a standard AWS config object pre-configured for use with regions, retries, and verbosity.
+// GetAWSConfig returns a standard AWS config object pre-configured for use with
+// regions, retries, and verbosity.
 //
 // If region is empty, we will attempt to read AWS_REGION then AWS_DEFAULT_REGION.
-func GetAWSConfig(ctx context.Context, region, profile string, retries int, verbose bool) (aws.Config, error) {
-	emptyConfig := aws.Config{}
-	var ok bool
+func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, error) {
+	var (
+		emptyConfig = aws.Config{}
 
-	if region == "" {
-		region, ok = os.LookupEnv("AWS_REGION")
-		if !ok {
-			region, ok = os.LookupEnv("AWS_DEFAULT_REGION")
+		ok      bool
+		region  string
+		profile string
+		retries int
+		verbose bool
+	)
+
+	if len(opts) > 0 {
+		opt := opts[0]
+		region := opt.Region
+		profile = opt.Profile
+		retries = opt.Retries
+		verbose = opt.Verbose
+
+		if region == "" {
+			region, ok = os.LookupEnv("AWS_REGION")
 			if !ok {
-				exiterrorf.ExitErrorf(errUnknownRegion)
+				region, ok = os.LookupEnv("AWS_DEFAULT_REGION")
+				if !ok {
+					return emptyConfig, errUnknownRegion
+				}
 			}
+		}
+
+		if profile == "" {
+			profile = os.Getenv("AWS_PROFILE")
+		}
+
+		if retries == 0 {
+			retries = 3
 		}
 	}
 
@@ -76,7 +107,14 @@ func GetAWSConfig(ctx context.Context, region, profile string, retries int, verb
 			}
 
 			// https://pkg.go.dev/github.com/aws/aws-sdk-go-v2/aws#ClientLogMode
-			return config.WithClientLogMode(aws.LogRetries | aws.LogRequestWithBody | aws.LogResponseWithBody | aws.LogDeprecatedUsage | aws.LogRequestEventMessage | aws.LogResponseEventMessage) // lint:ignore_length
+			return config.WithClientLogMode(
+				aws.LogRetries |
+					aws.LogRequestWithBody |
+					aws.LogResponseWithBody |
+					aws.LogDeprecatedUsage |
+					aws.LogRequestEventMessage |
+					aws.LogResponseEventMessage,
+			)
 		}(verbose),
 	)
 	if err != nil {
