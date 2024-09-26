@@ -121,7 +121,5 @@ func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, er
 		conf.Logger = logging.NewStandardLogger(os.Stderr)
 	}
 
-	fmt.Println("Region: ", region)
-
 	return conf, nil
 }
