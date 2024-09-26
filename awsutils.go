@@ -57,10 +57,14 @@ func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, er
 
 	if len(opts) > 0 {
 		opt := opts[0]
-		region := opt.Region
+		region = opt.Region
 		profile = opt.Profile
 		retries = opt.Retries
 		verbose = opt.Verbose
+
+		if profile == "" {
+			profile = os.Getenv("AWS_PROFILE")
+		}
 
 		if region == "" {
 			region, ok = os.LookupEnv("AWS_REGION")
@@ -70,10 +74,6 @@ func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, er
 					return emptyConfig, errUnknownRegion
 				}
 			}
-		}
-
-		if profile == "" {
-			profile = os.Getenv("AWS_PROFILE")
 		}
 
 		if retries == 0 {
@@ -94,10 +94,6 @@ func GetAWSConfig(ctx context.Context, opts ...AWSConfigOptions) (aws.Config, er
 			return retryLogic
 		}),
 		func(profile string) config.LoadOptionsFunc {
-			if profile == "" {
-				return config.WithSharedConfigProfile("")
-			}
-
 			return config.WithSharedConfigProfile(profile)
 		}(profile),
 		func(verbose bool) config.LoadOptionsFunc {
