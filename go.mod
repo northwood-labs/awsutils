@@ -3,10 +3,10 @@ module github.com/northwood-labs/awsutils
 go 1.21
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.31.0
+	github.com/aws/aws-sdk-go-v2 v1.32.0
 	github.com/aws/aws-sdk-go-v2/config v1.27.38
 	github.com/aws/aws-sdk-go-v2/service/sts v1.31.2
-	github.com/aws/smithy-go v1.21.0
+	github.com/aws/smithy-go v1.22.0
 )
 
 require (
