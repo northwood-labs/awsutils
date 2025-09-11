@@ -20,7 +20,7 @@ github.com/aws/aws-sdk-go-v2/service/sso v1.29.0 h1:H4QPAHLE1bHSQrZV6Hz+CPpJG+Mt
 github.com/aws/aws-sdk-go-v2/service/sso v1.29.0/go.mod h1:BnyjuIX0l+KXJVl2o9Ki3Zf0M4pA2hQYopFCRUj9ADU=
 github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.1 h1:8yI3jK5JZ310S8RpgdZdzwvlvBu3QbG8DP7Be/xJ6yo=
 github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.1/go.mod h1:HPzXfFgrLd02lYpcFYdDz5xZs94LOb+lWlvbAGaeMsk=
-github.com/aws/aws-sdk-go-v2/service/sts v1.38.3 h1:yEiZ0ztgji2GsCb/6uQSITXcGdtmWMfLRys0jJFiUkc=
-github.com/aws/aws-sdk-go-v2/service/sts v1.38.3/go.mod h1:Z+Gd23v97pX9zK97+tX4ppAgqCt3Z2dIXB02CtBncK8=
+github.com/aws/aws-sdk-go-v2/service/sts v1.38.4 h1:PR00NXRYgY4FWHqOGx3fC3lhVKjsp1GdloDv2ynMSd8=
+github.com/aws/aws-sdk-go-v2/service/sts v1.38.4/go.mod h1:Z+Gd23v97pX9zK97+tX4ppAgqCt3Z2dIXB02CtBncK8=
 github.com/aws/smithy-go v1.23.0 h1:8n6I3gXzWJB2DxBDnfxgBaSX6oe0d/t10qGz7OKqMCE=
 github.com/aws/smithy-go v1.23.0/go.mod h1:t1ufH5HMublsJYulve2RKmHDC15xu1f26kHCp/HgceI=
