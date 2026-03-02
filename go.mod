@@ -1,6 +1,6 @@
 module github.com/northwood-labs/awsutils
 
-go 1.23
+go 1.24
 
 toolchain go1.24.1
 
@@ -8,7 +8,7 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.41.2
 	github.com/aws/aws-sdk-go-v2/config v1.32.9
 	github.com/aws/aws-sdk-go-v2/service/sts v1.41.7
-	github.com/aws/smithy-go v1.24.1
+	github.com/aws/smithy-go v1.24.2
 )
 
 require (
