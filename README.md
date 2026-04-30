@@ -1,5 +1,8 @@
 # Shared AWS Utilities for Northwood Labs
 
+> [!NOTE]
+> Moved to <https://go.nwlabs.dev/x/aws/v2>.
+
 This is only a library. It does not work on its own. It is consumed by the various apps.
 
 ## Usage
